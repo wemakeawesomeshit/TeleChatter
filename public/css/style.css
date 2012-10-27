@@ -337,7 +337,7 @@ header {
   background-image: -webkit-linear-gradient(#555 5.8%, #242424);
   background-image: -moz-linear-gradient(#555 5.8%, #242424);
   background-image: -o-linear-gradient(#555 5.8%, #242424);
-  padding: 0.9em;
+  padding:0em 0.9em;
   z-index: 1000;
   position: absolute;
   right: 0;
