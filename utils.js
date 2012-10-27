@@ -41,7 +41,7 @@ exports.createRoomForProgram = function(client, programAttributes, callback) {
   var room = {
         key:         key,
         name:        name,
-        channelName: programAttributes.channelName,
+        channelName: unescape(programAttributes.channelName),
         channelLogo: programAttributes.channelLogo,
         programLogo: programAttributes.programLogo,
         
