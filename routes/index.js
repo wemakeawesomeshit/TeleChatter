@@ -56,16 +56,59 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+
+
+
+
+
+
+
+app.get('/programs', utils.restrict, function(req, res) {
+  res.render('programs');
+}
+
+/*
+ * Make a room or redirect to it
+ */
+app.post('/room/:id', utils.restrict, function(req, res) {
+  var programAttributes = req.params['programAttributes'];
+  utils.createRoomForProgramIfMissing(client, programAttributes, function(roomKey) {
+    res.json({redirect: '/room/'+roomKey});
+  });
+});
+
+
+/*
+ * Join a room
+ */
+app.get('/room/:id', utils.restrict, function(req, res) {
+  utils.getRoomInfo(req, res, client, function(room) {
+    utils.getUsersInRoom(req, res, client, room, function(users) {
+      utils.getPublicRoomsInfo(client, function(rooms) {
+        utils.getUserStatus(req.user, client, function(status) {
+          utils.enterRoom(req, res, room, users, rooms, status);
+        });
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
 /*
  * Rooms list
  */
 
-app.get('/rooms', utils.restrict, function(req, res) {
-  utils.getPublicRoomsInfo(client, function(rooms) {
-    console.log(rooms);
-    res.render('room_list', { rooms: rooms });
-  });
-});
+// app.get('/rooms', utils.restrict, function(req, res) {
+//   utils.getPublicRoomsInfo(client, function(rooms) {
+//     console.log(rooms);
+//     res.render('room_list', { rooms: rooms });
+//   });
+// });
 
 /*
  * Create a rooom
@@ -79,19 +122,5 @@ app.get('/rooms', utils.restrict, function(req, res) {
 //   });
 // });
 
-/*
- * Join a room
- */
 
-app.get('/:id', utils.restrict, function(req, res) {
-  utils.getRoomInfo(req, res, client, function(room) {
-    utils.getUsersInRoom(req, res, client, room, function(users) {
-      utils.getPublicRoomsInfo(client, function(rooms) {
-        utils.getUserStatus(req.user, client, function(status) {
-          utils.enterRoom(req, res, room, users, rooms, status);
-        });
-      });
-    });
-  });
-});
 

@@ -22,17 +22,17 @@ exports.genRoomKey = function() {
 /*
  * Room name is valid
  */
-
-exports.validRoomName = function(req, res, fn) {
-  req.body.room_name = req.body.room_name.trim();
-  var nameLen = req.body.room_name.length;
-
-  if(nameLen < 255 && nameLen >0) {
-    fn();
-  } else {
-    res.redirect('back');
-  }
-};
+// 
+// exports.validRoomName = function(req, res, fn) {
+//   req.body.room_name = req.body.room_name.trim();
+//   var nameLen = req.body.room_name.length;
+// 
+//   if(nameLen < 255 && nameLen >0) {
+//     fn();
+//   } else {
+//     res.redirect('back');
+//   }
+// };
 
 /*
  * Checks if room exists
@@ -47,68 +47,66 @@ exports.roomExists = function(req, res, client, fn) {
   });
 };
 
-/*
- * Creates a room
- */       
-// exports.createRoom = function(req, res, client) {
-//   var roomKey = exports.genRoomKey()
-//     , room = {
-//         key: roomKey,
-//         name: req.body.room_name,
-//         admin: req.user.provider + ":" + req.user.username,
-//         locked: 0,
-//         online: 0
-//       };
-// 
-//   client.hmset('rooms:' + roomKey + ':info', room, function(err, ok) {
-//     if(!err && ok) {
-//       client.hset('balloons:rooms:keys', encodeURIComponent(req.body.room_name), roomKey);
-//       client.sadd('balloons:public:rooms', roomKey);
-//       res.redirect('/' + roomKey);
-//     } else {
-//       res.send(500);
-//     }
-//   });
-// };
 
-
-exports.createRoom = function(client, roomName, callback) {
-  var roomKey = exports.genRoomKey()
-    , room = {
-        key: roomKey,
-        name: roomName,
+exports.createRoomForProgram = function(client, programAttributes, callback) {
+  var key = programAttributes.id;
+  var name = programAttributes.title;
+  
+  var room = {
+        key:         key,
+        name:        name,
+        channelName: programAttributes.channelName,
+        channelLogo: programAttributes.channelLogo,
+        programLogo: programAttributes.programLogo,
+        
         // admin: req.user.provider + ":" + req.user.username,
         locked: 0,
         online: 0
       };
-
-  client.hmset('rooms:' + roomKey + ':info', room, function(err, ok) {
-    if(!err && ok) {
-      client.hset('balloons:rooms:keys', encodeURIComponent(roomName), roomKey);
-      client.sadd('balloons:public:rooms', roomKey);
       
-      console.log('Created room: '+roomName);
-      callback && callback(roomKey);
+  
+
+  client.hmset('rooms:' + key + ':info', room, function(err, ok) {
+    if(!err && ok) {
+      client.hset('balloons:rooms:keys', encodeURIComponent(name), key);
+      client.sadd('balloons:public:rooms', key);
+      
+      console.log('Created room: '+name);
+      callback && callback(key);
     } else {
-      console.log('Failed to create room: '+roomName);
+      console.log('Failed to create room: '+name);
       callback && callback(false);
     }
   });
 };
 
-exports.findOrCreateRoom = function(client, roomName, callback) {
-  client.hget('balloons:rooms:keys', encodeURIComponent(req.body.room_name), function(err, roomKey) {
-    if(!err && roomKey) {
-      // res.redirect( '/' + roomKey );
-      callback(roomKey);
+exports.createRoomForProgramIfMissing = function(client, programAttributes, callback) {
+  var key = programAttributes.id;
+  client.hget('rooms:' + key + ':info', function(err, reply) {
+    if (err) console.log(err);
+    
+    if (reply) {
+      callback(key);
     } else {
-      exports.createRoom(client, roomName, function(roomKey) {
-        console.log('created');
-        callback(roomKey);
+      exports.createRoomForProgram(client, programAttributes, function() {
+        callback(key);
       });
     }
   });
 };
+  
+  // client.hget('balloons:rooms:keys', encodeURIComponent(req.body.room_name), function(err, roomKey) {
+  //   if(!err && roomKey) {
+  //     // res.redirect( '/' + roomKey );
+  //     callback(roomKey);
+  //   } else {
+  //     exports.createRoom(client, roomName, function(roomKey) {
+  //       console.log('created');
+  //       callback(roomKey);
+  //     });
+  //   }
+  // });
+// };
 
 /*
  * Get Room Info
