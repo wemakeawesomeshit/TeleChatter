@@ -8,15 +8,5 @@
 	.dropdown-options
 		.triangle
 		.list
-			- fullStatus.forEach(function(status) {
-				- if (status == user.status)
-					- current = 'current'
-				- else
-					- current = ''
-				a(class='option status #{status} #{current}', data-status='#{status}', href='#')
-					b
-					| #{status}
-					
-			- })
 			a(class='option logout', href='/logout') Sign Out
 			

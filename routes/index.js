@@ -62,6 +62,7 @@ app.get('/logout', function(req, res){
 
 app.get('/rooms', utils.restrict, function(req, res) {
   utils.getPublicRoomsInfo(client, function(rooms) {
+    console.log(rooms);
     res.render('room_list', { rooms: rooms });
   });
 });
@@ -69,14 +70,14 @@ app.get('/rooms', utils.restrict, function(req, res) {
 /*
  * Create a rooom
  */
-
-app.post('/create', utils.restrict, function(req, res) {
-  utils.validRoomName(req, res, function(roomKey) {
-    utils.roomExists(req, res, client, function() {
-      utils.createRoom(req, res, client);
-    });
-  });
-});
+// 
+// app.post('/create', utils.restrict, function(req, res) {
+//   utils.validRoomName(req, res, function(roomKey) {
+//     utils.roomExists(req, res, client, function() {
+//       utils.createRoom(req, res, client);
+//     });
+//   });
+// });
 
 /*
  * Join a room

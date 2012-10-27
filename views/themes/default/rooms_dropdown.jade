@@ -3,9 +3,7 @@
 	a.selected(href='#')= room.name
 	.dropdown-options
 		.triangle
-		form(method="POST",action="/create")
-			a.option.create-room(href='#') Create a room
-			input.text(type='text', name='room_name', value='', placeholder='Name of your room', style='display: none')
+
 		.list
 			a.option.current(href='#')= room.name
 			each r,index in rooms	 

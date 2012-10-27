@@ -50,23 +50,48 @@ exports.roomExists = function(req, res, client, fn) {
 /*
  * Creates a room
  */       
-exports.createRoom = function(req, res, client) {
+// exports.createRoom = function(req, res, client) {
+//   var roomKey = exports.genRoomKey()
+//     , room = {
+//         key: roomKey,
+//         name: req.body.room_name,
+//         admin: req.user.provider + ":" + req.user.username,
+//         locked: 0,
+//         online: 0
+//       };
+// 
+//   client.hmset('rooms:' + roomKey + ':info', room, function(err, ok) {
+//     if(!err && ok) {
+//       client.hset('balloons:rooms:keys', encodeURIComponent(req.body.room_name), roomKey);
+//       client.sadd('balloons:public:rooms', roomKey);
+//       res.redirect('/' + roomKey);
+//     } else {
+//       res.send(500);
+//     }
+//   });
+// };
+
+
+exports.createRoom = function(client, roomName, callback) {
   var roomKey = exports.genRoomKey()
     , room = {
         key: roomKey,
-        name: req.body.room_name,
-        admin: req.user.provider + ":" + req.user.username,
+        name: roomName,
+        // admin: req.user.provider + ":" + req.user.username,
         locked: 0,
         online: 0
       };
 
   client.hmset('rooms:' + roomKey + ':info', room, function(err, ok) {
     if(!err && ok) {
-      client.hset('balloons:rooms:keys', encodeURIComponent(req.body.room_name), roomKey);
+      client.hset('balloons:rooms:keys', encodeURIComponent(roomName), roomKey);
       client.sadd('balloons:public:rooms', roomKey);
-      res.redirect('/' + roomKey);
+      
+      console.log('Created room: '+roomName);
+      callback && callback(true);
     } else {
-      res.send(500);
+      console.log('Failed to create room: '+roomName);
+      callback && callback(false);
     }
   });
 };
