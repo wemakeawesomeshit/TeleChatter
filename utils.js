@@ -19,20 +19,6 @@ exports.genRoomKey = function() {
   return shasum.digest('hex').substr(0,6);
 };
 
-/*
- * Room name is valid
- */
-// 
-// exports.validRoomName = function(req, res, fn) {
-//   req.body.room_name = req.body.room_name.trim();
-//   var nameLen = req.body.room_name.length;
-// 
-//   if(nameLen < 255 && nameLen >0) {
-//     fn();
-//   } else {
-//     res.redirect('back');
-//   }
-// };
 
 /*
  * Checks if room exists
@@ -50,7 +36,7 @@ exports.roomExists = function(req, res, client, fn) {
 
 exports.createRoomForProgram = function(client, programAttributes, callback) {
   var key = programAttributes.id;
-  var name = programAttributes.title;
+  var name = unescape(programAttributes.title);
   
   var room = {
         key:         key,
@@ -81,8 +67,10 @@ exports.createRoomForProgram = function(client, programAttributes, callback) {
 };
 
 exports.createRoomForProgramIfMissing = function(client, programAttributes, callback) {
+
   var key = programAttributes.id;
-  client.hget('rooms:' + key + ':info', function(err, reply) {
+  
+  client.hgetall('rooms:' + key + ':info', function(err, reply) {
     if (err) console.log(err);
     
     if (reply) {
@@ -94,19 +82,7 @@ exports.createRoomForProgramIfMissing = function(client, programAttributes, call
     }
   });
 };
-  
-  // client.hget('balloons:rooms:keys', encodeURIComponent(req.body.room_name), function(err, roomKey) {
-  //   if(!err && roomKey) {
-  //     // res.redirect( '/' + roomKey );
-  //     callback(roomKey);
-  //   } else {
-  //     exports.createRoom(client, roomName, function(roomKey) {
-  //       console.log('created');
-  //       callback(roomKey);
-  //     });
-  //   }
-  // });
-// };
+
 
 /*
  * Get Room Info
@@ -114,8 +90,15 @@ exports.createRoomForProgramIfMissing = function(client, programAttributes, call
 
 exports.getRoomInfo = function(req, res, client, fn) { 
   client.hgetall('rooms:' + req.params.id + ':info', function(err, room) {
-    if(!err && room && Object.keys(room).length) fn(room);
-    else res.redirect('back');
+    if (err) console.log(err);
+    
+    if(!err && room && Object.keys(room).length) {
+      fn(room);
+    } else {
+      console.log('room not found: '+'rooms:' + req.params.id + ':info');
+      res.redirect('back');
+    }
+    // else 
   });
 };
 

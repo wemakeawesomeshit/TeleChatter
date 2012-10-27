@@ -1,5 +1,7 @@
 
 $(document).ready(function() {
+  $('body').css('overflow', 'auto');
+  
   var now = parseInt(new Date().getTime() / 1000, 10),
     //url = "http://uk.zeebox.com/tms/schedules.json?provider=1&region=1&now=" + now + "&when=prevnownext&min-fresh=60&hd=true&view=compact&tvc=uk";
     //proxyUrl = "" + encodeURIComponent(url) + "&callback=?";
@@ -17,6 +19,7 @@ $(document).ready(function() {
         "programAttributes[channelLogo]": $r.data("channellogo"),
         "programAttributes[programLogo]": $r.data("programlogo")
       }, function(response) {
+        window.location = response.redirect;
     });
   });
 

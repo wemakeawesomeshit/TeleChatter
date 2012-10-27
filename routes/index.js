@@ -58,11 +58,6 @@ app.get('/logout', function(req, res){
 
 
 
-
-
-
-
-
 app.get('/programs', utils.restrict, function(req, res) {
   res.render('programs');
 })
@@ -71,9 +66,10 @@ app.get('/programs', utils.restrict, function(req, res) {
  * Make a room or redirect to it
  */
 app.post('/room/:id', utils.restrict, function(req, res) {
-  var programAttributes = req.params['programAttributes'];
+  var programAttributes = req.body.programAttributes;
   utils.createRoomForProgramIfMissing(client, programAttributes, function(roomKey) {
-    res.json({redirect: '/room/'+roomKey});
+    console.log('redirecting to: '+'/room/'+req.params['id']);
+    res.json({redirect: '/room/'+req.params['id']});
   });
 });
 
@@ -92,35 +88,3 @@ app.get('/room/:id', utils.restrict, function(req, res) {
     });
   });
 });
-
-
-
-
-
-
-
-/*
- * Rooms list
- */
-
-// app.get('/rooms', utils.restrict, function(req, res) {
-//   utils.getPublicRoomsInfo(client, function(rooms) {
-//     console.log(rooms);
-//     res.render('room_list', { rooms: rooms });
-//   });
-// });
-
-/*
- * Create a rooom
- */
-// 
-// app.post('/create', utils.restrict, function(req, res) {
-//   utils.validRoomName(req, res, function(roomKey) {
-//     utils.roomExists(req, res, client, function() {
-//       utils.createRoom(req, res, client);
-//     });
-//   });
-// });
-
-
-

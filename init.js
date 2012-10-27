@@ -52,19 +52,6 @@ module.exports = function(client){
     if(sockets.length) client.del(sockets);
     console.log('Deletion of socket.io stored sockets data >> ', err || "Done!");
   });
-  
-  utils.getPublicRoomsInfo(client, function(rooms) {
-    // if (rooms.length) return;
-    
-    // roomsToMake = ['BBC1', 'BBC2', 'ITV', 'Channel 4'];
-    // utils.createRoom(client, 'BBC1', null);
-    // utils.createRoom(client, 'BBC2', null);
-    // utils.createRoom(client, 'ITV', null);
-    // utils.createRoom(client, 'Channel 4', null);
-  });
-  
-  
-
 
   /*
    * Create 'chats' dir

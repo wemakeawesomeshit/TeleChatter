@@ -44,3 +44,9 @@ span.time {
   font-size: 0.5em;
 }
 
+#programs {
+  width: 320px;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

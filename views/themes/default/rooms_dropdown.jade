@@ -8,7 +8,7 @@
 			a.option.current(href='#')= room.name
 			each r,index in rooms	 
 				-if(r.key != room.key) {
-					a.option(href="/"+r.key, title="#{r.name}")
+					a.option(href="/room/"+r.key, title="#{r.name}")
 						| #{r.name.substr(0,15)}
 						span.dropdown-users-online
 							| #{r.online}
