@@ -34,9 +34,18 @@ $(document).ready(function() {
         broadcastImg = '<img src="' + broadcastsrc + '">';
 
       console.log(broadcast);
+      
+      broadcast.start_time = parseInt(broadcast.start_time);
+      broadcast.end_time = parseInt(broadcast.end_time);
+
+      console.log(broadcast.start_time);
 
       var startTime = new Date(broadcast.start_time),
-        endTime = new Date(broadcast.end_time),
+        endTime = new Date(broadcast.end_time);
+        
+        console.log(startTime);
+        
+        //startTime = broadcast.start_time;
         timeStr = (startTime.getHours() < 10 ? "0" : "") + startTime.getHours() + ":" + (startTime.getMinutes() < 10 ? "0" : "") + startTime.getMinutes() + " - " + (endTime.getHours() < 10 ? "0" : "") + endTime.getHours() + ":" + (endTime.getMinutes() < 10 ? "0" : "") + endTime.getMinutes();
 
       $channels.append('<li data-title="' + escape(broadcast.title) + '" data-chan="' + channel.logical_channel_number + '" data-id="' + broadcast.id + '" data-channelname="' + escape(channel.service.name) + '" data-channellogo="' + imgsrc + '" data-programlogo="' + broadcastsrc + '">' + channelImg + broadcastImg + '<span>' + broadcast.title + '<span class="time">' + timeStr + '</span>' + '</span></li>');
