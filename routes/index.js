@@ -19,7 +19,7 @@ app.get('/', function(req, res, next) {
         'users:' + req.user.provider + ":" + req.user.username
       , req.user
     );
-    res.redirect('/rooms');
+    res.redirect('/programs');
   } else{
     res.render('index');
   }
@@ -65,7 +65,7 @@ app.get('/logout', function(req, res){
 
 app.get('/programs', utils.restrict, function(req, res) {
   res.render('programs');
-}
+})
 
 /*
  * Make a room or redirect to it
