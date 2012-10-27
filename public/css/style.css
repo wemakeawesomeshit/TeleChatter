@@ -1379,3 +1379,8 @@ input::-moz-input-placeholder {
     page-break-after: avoid;
   }
 }
+
+
+h2.title {
+  color: white;
+}
