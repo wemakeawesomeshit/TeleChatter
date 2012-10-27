@@ -88,10 +88,24 @@ exports.createRoom = function(client, roomName, callback) {
       client.sadd('balloons:public:rooms', roomKey);
       
       console.log('Created room: '+roomName);
-      callback && callback(true);
+      callback && callback(roomKey);
     } else {
       console.log('Failed to create room: '+roomName);
       callback && callback(false);
+    }
+  });
+};
+
+exports.findOrCreateRoom = function(client, roomName, callback) {
+  client.hget('balloons:rooms:keys', encodeURIComponent(req.body.room_name), function(err, roomKey) {
+    if(!err && roomKey) {
+      // res.redirect( '/' + roomKey );
+      callback(roomKey);
+    } else {
+      exports.createRoom(client, roomName, function(roomKey) {
+        console.log('created');
+        callback(roomKey);
+      });
     }
   });
 };
